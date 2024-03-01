@@ -8,7 +8,7 @@ export default {
 </script>
 <template lang="">
   <div>
-    
+    <Project />
   </div>
 </template>
 <style lang="">
