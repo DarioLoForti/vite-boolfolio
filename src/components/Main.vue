@@ -11,16 +11,24 @@ export default {
         return{
             store,
             projects: [],
+            currentPage: 1,
+            lastPage: null,
         }
     },
     created(){
         this.getProjects();
     },
     methods: {
-        getProjects() {
-            axios.get(`${this.store.baseUrl}/api/projects`).then((response) => {
-                this.projects = response.data.results;
-            })
+        getProjects(page_number) {
+            axios.get(`${this.store.baseUrl}/api/projects`,{
+                params: {
+                    page: page_number
+                }
+            }).then((response) => {
+                this.projects = response.data.results.data;
+                this.currentPage = response.data.results.current_page
+                this.lastPage = response.data.results.last_page
+            });
         }
     }
 }
@@ -37,11 +45,19 @@ export default {
                 </div>
                 <div class="row">
                     <div class="col-12 d-flex flex-wrap">
-                        
                             <ProjectCard v-for="project, index in projects" :key="index" :project="project"/>
-
                     </div>
                 </div>
+                <div class="d-flex justify-content-center">
+                    <button :class="currentPage == 1 ? 'disabled' : '' " class="btn btn-sm btn-square" @click="getProjects(currentPage - 1 ) ">
+                         precedente
+                    </button>
+                    <button :class="currentPage == lastPage ? 'disabled' : '' " class="btn btn-sm btn-square" @click="getProjects(currentPage + 1 ) ">
+                        successivo
+                    </button>
+                   
+                </div>
+                
             </div>
         </div>
     </main>
