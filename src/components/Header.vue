@@ -1,6 +1,13 @@
 <script>
+import { store } from '../store.js'
 export default {
-    name: 'Header'
+    name: 'Header',
+    data(){
+        return{
+            store,
+          
+        }
+    },
 }
 </script>
 <template lang="">
@@ -11,10 +18,10 @@ export default {
                     <h1>Boolfolio</h1>
                 </div>
                 <div class="col-8">
-                    <ul class='float-end'>
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#">Progetti</a></li>
-                        <li><a href="#">Contatti</a></li>
+                    <ul class='float-end '>
+                        <li v-for="item, index in store.menuItems" :key="index">
+                            <router-link :to="{ name: item.name }">{{ item.label }}</router-link>
+                        </li>
                     </ul>
                 </div>
             </div>
