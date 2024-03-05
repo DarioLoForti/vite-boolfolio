@@ -4,6 +4,9 @@ import axios from 'axios';
 
 export default {
     name: 'AppProject',
+    props: {
+        project: Object
+    },
     data(){
         return{
             store,
@@ -18,16 +21,26 @@ export default {
             axios.get(`${this.store.baseUrl}/api/projects/${this.$route.params.slug}`,).then((response) => {
                 this.project = response.data.project;
             });
+        },
+        getUrlImage(){
+            let image;
+            if(this.project.cover_image != null){
+                image = '/storage/' + this.project.cover_image;
+            }
+            else{
+                image = 'img/folder.png'
+            }
+            return `${this.store.baseUrl}/storage/${image}`;
         }
     }
 }
 </script>
 <template lang="">
     <div class="container">
-        <div class="roe">
+        <div class="row">
             <div class="col-12">
-                <div class="image">
-                    <img :src="`${this.store.baseUrl}/storage/${project.cover_image}`" alt="project.titolo">
+                <div class="image d-flex justify-content-center">
+                    <img :src="getUrlImage()" alt="project.titolo">
                 </div>
                 <div class="col-12">
                     <h1 class="text-center py-5">Titolo: {{ project.titolo}} </h1>
@@ -48,6 +61,11 @@ export default {
 </template>
 <style lang="scss" scoped>
 @use '../styles/generals.scss' as*;
+.image{
+    img{
+        width: 200px;
 
-    
+    }
+
+}
 </style>
