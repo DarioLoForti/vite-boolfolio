@@ -11,6 +11,7 @@ export default {
         return{
             store,
             project: null,
+            success: null,
         }
     },
     created(){
@@ -19,7 +20,13 @@ export default {
     methods: {
         getProject() {
             axios.get(`${this.store.baseUrl}/api/projects/${this.$route.params.slug}`,).then((response) => {
-                this.project = response.data.project;
+                if(response.data.success){
+                    this.project = response.data.project;
+                    this.success = response.data.success;
+                }
+                else{
+                    this.$router.push({ name: 'not-found'})
+                }
             });
         },
         getUrlImage(){
@@ -37,7 +44,7 @@ export default {
 </script>
 <template lang="">
     <div class="container">
-        <div class="row">
+        <div class="row" v-if="success == true">
             <div class="col-12">
                 <div class="image d-flex justify-content-center">
                     <img :src="getUrlImage()" alt="project.titolo">
